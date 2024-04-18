@@ -1,0 +1,9 @@
+interface test {
+    test: func();
+}
+
+world w {
+  import iface;
+  export iface;
+  export test;
+}

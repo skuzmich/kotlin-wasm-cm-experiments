@@ -1,0 +1,11 @@
+[package]
+name = "iface"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wit-bindgen = "0.14"
+pulldown-cmark = "0.9"
+
+[lib]
+crate-type = ["cdylib"]
