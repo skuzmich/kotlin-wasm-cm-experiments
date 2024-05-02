@@ -3,6 +3,7 @@ interface test {
 }
 
 world w {
+  import jsiface;
   import iface;
   export iface;
   export test;

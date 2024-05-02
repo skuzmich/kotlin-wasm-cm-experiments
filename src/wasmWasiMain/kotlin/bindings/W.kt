@@ -58,6 +58,51 @@ fun Pointer.storeDouble(value: Double) { storeLong(value.toRawBits()) }
 data class Tuple2<T0,T1,>(val f0: T0,val f1: T1,)
 data class Tuple3<T0,T1,T2,>(val f0: T0,val f1: T1,val f2: T2,)
 data class Tuple6<T0,T1,T2,T3,T4,T5,>(val f0: T0,val f1: T1,val f2: T2,val f3: T3,val f4: T4,val f5: T5,)
+object Jsiface {
+  class X(val __handle: Int)
+  public fun constructorX(a: Int): Jsiface.X {
+    withScopedMemoryAllocator { allocator -> 
+    val ret: Int = __wasm_import_constructorX(a)
+    freeAllComponentModelReallocAllocatedMemory();
+    return Jsiface.X(ret)
+  }
+}
+public fun methodX__getA(self: Jsiface.X): Int {
+  withScopedMemoryAllocator { allocator -> 
+  val ret: Int = __wasm_import_methodX__getA(self.__handle)
+  freeAllComponentModelReallocAllocatedMemory();
+  return ret
+}
+}
+public fun methodX__setA(self: Jsiface.X, a: Int): Unit {
+  withScopedMemoryAllocator { allocator -> 
+  __wasm_import_methodX__setA(self.__handle, a)
+  freeAllComponentModelReallocAllocatedMemory();
+}
+}
+public fun staticX__add(x: Jsiface.X, a: Int): Jsiface.X {
+  withScopedMemoryAllocator { allocator -> 
+  val ret: Int = __wasm_import_staticX__add(x.__handle, a)
+  freeAllComponentModelReallocAllocatedMemory();
+  return Jsiface.X(ret)
+}
+}
+
+}
+
+@WasmImport("cm:example/jsiface", "[constructor]x")
+private external fun __wasm_import_constructorX(p0: Int): Int
+
+@WasmImport("cm:example/jsiface", "[method]x.get-a")
+private external fun __wasm_import_methodX__getA(p0: Int): Int
+
+@WasmImport("cm:example/jsiface", "[method]x.set-a")
+private external fun __wasm_import_methodX__setA(p0: Int, p1: Int): Unit
+
+@WasmImport("cm:example/jsiface", "[static]x.add")
+private external fun __wasm_import_staticX__add(p0: Int, p1: Int): Int
+
+
 object Iface {
   
   data class Ab(

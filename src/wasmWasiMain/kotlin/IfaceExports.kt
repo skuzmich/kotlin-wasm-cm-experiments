@@ -1,3 +1,5 @@
+import kotlin.wasm.WasmExport
+
 object IfaceExportsImpl : IfaceExports {
     override fun markdownToHtml(x: String): String = Iface.markdownToHtml(x)
     override fun test1(p1: Boolean, p2: Byte, p3: Short, p4: Int, p5: Long, p6: UByte, p7: UShort, p8: UInt, p9: ULong, p10: Int): String =
@@ -78,5 +80,8 @@ object TestExportsImpl : TestExports {
         println(Iface.testFlags(Iface.Fg(true, true, true, true)))
         println(Iface.testFlags(Iface.Fg(true, false, true, false)))
         println(Iface.testFlags(Iface.Fg(false, false, true, true)))
+
+        val x = Jsiface.constructorX(10)
+        println(Jsiface.methodX__getA(x))
     }
 }

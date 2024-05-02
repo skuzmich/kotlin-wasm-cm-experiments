@@ -1,0 +1,5 @@
+package cm:example;
+
+world w {
+  export jsiface;
+}

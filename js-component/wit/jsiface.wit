@@ -1,0 +1,10 @@
+package cm:example;
+
+interface jsiface {
+  resource x {
+    constructor(a: s32);
+    get-a: func() -> s32;
+    set-a: func(a: s32);
+    add: static func(x: x, a: s32) -> x;
+  }
+}
