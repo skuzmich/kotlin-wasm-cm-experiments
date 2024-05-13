@@ -17,12 +17,9 @@ cp wit/jsiface.wit ./js-component/wit/
 cargo build --target wasm32-unknown-unknown --release && \
 wasm-tools component new ./target/wasm32-unknown-unknown/release/iface.wasm -o ../build/out/dependencies/iface.wasm)
 
-(cd ./js-component/ && \
-  npx jco componentize main.mjs --wit wit --world-name w --out ../build/out/dependencies/jsiface.wasm
-)
-
 # Generate WIT bindings for Kotlin
-wit-bindgen kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
+# wit-bindgen kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
+cargo run --bin wit-bindgen --manifest-path /Users/skuzmich/work/wit-bindgen/Cargo.toml kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
 
 # Compile Kotlin code
 ./gradlew :compileProductionExecutableKotlinWasmWasi
@@ -37,10 +34,10 @@ mkdir -p ./build/out/component
 wasm-tools component new build/out/wasm/$MODULE_NAME.stube.embedded.wasm -o build/out/component/$MODULE_NAME.uncomposed.wasm --adapt $WASI_ADAPTER --realloc-via-memory-grow
 
 # Compose Kotlin component with Rust component into a single linked component
-wasm-tools compose build/out/component/$MODULE_NAME.uncomposed.wasm  -o build/out/component/$MODULE_NAME.wasm --definitions ./build/out/dependencies/iface.wasm --definitions ./build/out/dependencies/jsiface.wasm --search-path ./build/out/dependencies
+wasm-tools compose build/out/component/$MODULE_NAME.uncomposed.wasm  -o build/out/component/$MODULE_NAME.wasm --definitions ./build/out/dependencies/iface.wasm --search-path ./build/out/dependencies
 
 # Transpile component into JS + core Wasm
-npx jco transpile build/out/component/$MODULE_NAME.wasm -o build/out/jco --base64-cutoff 0 -q
+npx jco transpile build/out/component/$MODULE_NAME.wasm -o build/out/jco --base64-cutoff 0 -q --map "cm:example/jsiface=./../../../jsiface.mjs"
 
 # Replace a stub module with a real Kotlin core module
 cp $COMPILED_WASM/$MODULE_NAME.wasm build/out/jco/$MODULE_NAME.core.wasm

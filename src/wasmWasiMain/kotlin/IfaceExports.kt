@@ -81,7 +81,13 @@ object TestExportsImpl : TestExports {
         println(Iface.testFlags(Iface.Fg(true, false, true, false)))
         println(Iface.testFlags(Iface.Fg(false, false, true, true)))
 
-        val x = Jsiface.constructorX(10)
-        println(Jsiface.methodX__getA(x))
+        println("\n-- Testing resources")
+        val x = Jsiface.X(10)
+        val x2 = Jsiface.X.add(x, 20)
+        println(x2.getA())
+        x2.setA(300)
+        println(x2.getA())
+        x.close()
+        x2.close()
     }
 }
