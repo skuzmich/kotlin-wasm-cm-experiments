@@ -80,13 +80,13 @@ object TestExportsImpl : TestExports {
         println(Iface.testFlags(Iface.Fg(false, false, true, true)))
 
         println("\n-- Testing resources")
-        val x = Jsiface.X(10)
-        val x2 = Jsiface.X.add(x, 20)
-        println(x2.getA())
-        x2.setA(300)
-        println(x2.getA())
-        x.close()
-        x2.close()
+        Jsiface.X(10).use { x ->
+            Jsiface.X.add(x, 20).use { x2 ->
+                println(x2.getA())
+                x2.setA(300)
+                println(x2.getA())
+            }
+        }
 
         println("\n-- Testing WASI Preview 2")
         testWASI()
@@ -126,15 +126,16 @@ object WASI_020 {
     val rootDescriptor = Preopens.getDirectories().find { it.second == "/" }!!.first
 
     fun readText(absolutePath: String): String {
-        val fd = rootDescriptor.openAt(
+        rootDescriptor.openAt(
             pathFlags = Types.PathFlags(symlinkFollow = false),
             "./$absolutePath",
             flags = Types.DescriptorFlags(read = true, write = false),
             openFlags = Types.OpenFlags()
-        ).getOrThrow()
-        val stat = fd.stat().getOrThrow()
-        val readResult = fd.read(stat.size, 0u).getOrThrow()
-        return readResult.first.toUByteArray().toByteArray().decodeToString()
+        ).getOrThrow().use { fd ->
+            val stat = fd.stat().getOrThrow()
+            val readResult = fd.read(stat.size, 0u).getOrThrow()
+            return readResult.first.toUByteArray().toByteArray().decodeToString()
+        }
     }
 
     fun println(x: Any) {

@@ -12,11 +12,6 @@ sealed interface Option<out T> {
 
 internal value class ResourceHandle(internal val value: Int)
 
-// TODO: Use stdlib type
-public interface AutoCloseable {
-  fun close(): Unit
-}
-
 @WasmExport
 fun cabi_realloc(ptr: Int, oldSize: Int, align: Int, newSize: Int): Int =
 componentModelRealloc(ptr, oldSize, newSize)
