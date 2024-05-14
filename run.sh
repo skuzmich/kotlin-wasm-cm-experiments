@@ -18,8 +18,7 @@ cargo build --target wasm32-unknown-unknown --release && \
 wasm-tools component new ./target/wasm32-unknown-unknown/release/iface.wasm -o ../build/out/dependencies/iface.wasm)
 
 # Generate WIT bindings for Kotlin
-# wit-bindgen kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
-cargo run --bin wit-bindgen --manifest-path /Users/skuzmich/work/wit-bindgen/Cargo.toml kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
+wit-bindgen kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
 
 # Compile Kotlin code
 ./gradlew :compileProductionExecutableKotlinWasmWasi

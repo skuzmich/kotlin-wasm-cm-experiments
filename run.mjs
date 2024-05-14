@@ -1,8 +1,4 @@
 import('./build/out/jco/kco-wasm-wasi.mjs').then(x => {
-    console.log("Testing...");
-    x.test.test();
-    console.log("Testing end...");
-
     console.log(x.iface.markdownToHtml('- Ha'));
     console.log(x.iface.test1(
         true,
@@ -37,4 +33,8 @@ import('./build/out/jco/kco-wasm-wasi.mjs').then(x => {
     console.log(x.iface.testEnum("lime-green"));
 
     console.log(x.iface.testFlags({a: true, b: true, c: true}));
+
+    console.log("Testing...");
+    x.test.test();
+    console.log("Testing end...");
 });

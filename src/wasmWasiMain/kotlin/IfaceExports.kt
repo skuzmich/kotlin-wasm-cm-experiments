@@ -89,5 +89,48 @@ object TestExportsImpl : TestExports {
         println(x2.getA())
         x.close()
         x2.close()
+
+        println("\n-- Testing WASI Preview 2")
+        testWASI()
+        println("\n-- iface exports testing done")
+        println("--------------------------------\n\n")
     }
+}
+
+fun testWASI() {
+    println("Environment.getEnvironment: ${Environment.getEnvironment()}")
+    println("Environment.getArguments: ${Environment.getArguments()}")
+    println("Environment.initialCwd: ${Environment.initialCwd()}")
+
+    println("Random.getRandomU64: ${Random.getRandomU64()}")
+    println("Random.getRandomBytes: ${Random.getRandomBytes(10u)}")
+    println("Insecure.getInsecureRandomU64: ${Insecure.getInsecureRandomU64()}")
+    println("Insecure.getInsecureRandomBytes: ${Insecure.getInsecureRandomBytes(10u)}")
+    println("InsecureSeed.insecureSeed: ${InsecureSeed.insecureSeed()}")
+
+    println("MonotonicClock.now: ${MonotonicClock.now()}")
+    println("MonotonicClock.resolution: ${MonotonicClock.resolution()}")
+    // TODO: MonotonicClock.subscribeInstant()
+    // TODO: MonotonicClock.subscribeDuration()
+
+    println("WallClock.now: ${WallClock.now()}")
+    println("WallClock.resolution: ${WallClock.resolution()}")
+
+    val stderr = Stderr.getStderr()
+    val stdout = Stdout.getStdout()
+    wasi02println("Test writing to stdout via WASI 0.2 binding")
+    wasi02printlnErr("Test writing to stderr via WASI 0.2 binding")
+
+    println("Preopens.getDirectories: ${Preopens.getDirectories()}")
+}
+
+val stdout = Stdout.getStdout()
+val stderr = Stdout.getStdout()
+
+fun wasi02println(x: Any) {
+    stdout.blockingWriteAndFlush((x.toString() + "\n").encodeToByteArray().map { it.toUByte() })
+}
+
+fun wasi02printlnErr(x: Any) {
+    stderr.blockingWriteAndFlush((x.toString() + "\n").encodeToByteArray().map { it.toUByte() })
 }
