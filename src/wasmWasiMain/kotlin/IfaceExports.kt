@@ -1,5 +1,3 @@
-import kotlin.wasm.WasmExport
-
 object IfaceExportsImpl : IfaceExports {
     override fun markdownToHtml(x: String): String = Iface.markdownToHtml(x)
     override fun test1(p1: Boolean, p2: Byte, p3: Short, p4: Int, p5: Long, p6: UByte, p7: UShort, p8: UInt, p9: ULong, p10: Int): String =
@@ -116,21 +114,34 @@ fun testWASI() {
     println("WallClock.now: ${WallClock.now()}")
     println("WallClock.resolution: ${WallClock.resolution()}")
 
-    val stderr = Stderr.getStderr()
+    WASI_020.println("Test writing to stdout via WASI 0.2 binding")
+    WASI_020.printlnErr("Test writing to stderr via WASI 0.2 binding")
+
+    println("Reading .gitignore file:\n ${WASI_020.readText(Environment.initialCwd() + "/.gitignore")}")
+}
+
+object WASI_020 {
     val stdout = Stdout.getStdout()
-    wasi02println("Test writing to stdout via WASI 0.2 binding")
-    wasi02printlnErr("Test writing to stderr via WASI 0.2 binding")
+    val stderr = Stdout.getStdout()
+    val rootDescriptor = Preopens.getDirectories().find { it.second == "/" }!!.first
 
-    println("Preopens.getDirectories: ${Preopens.getDirectories()}")
-}
+    fun readText(absolutePath: String): String {
+        val fd = rootDescriptor.openAt(
+            pathFlags = Types.PathFlags(symlinkFollow = false),
+            "./$absolutePath",
+            flags = Types.DescriptorFlags(read = true, write = false),
+            openFlags = Types.OpenFlags()
+        ).getOrThrow()
+        val stat = fd.stat().getOrThrow()
+        val readResult = fd.read(stat.size, 0u).getOrThrow()
+        return readResult.first.toUByteArray().toByteArray().decodeToString()
+    }
 
-val stdout = Stdout.getStdout()
-val stderr = Stdout.getStdout()
+    fun println(x: Any) {
+        stdout.blockingWriteAndFlush((x.toString() + "\n").encodeToByteArray().map { it.toUByte() })
+    }
 
-fun wasi02println(x: Any) {
-    stdout.blockingWriteAndFlush((x.toString() + "\n").encodeToByteArray().map { it.toUByte() })
-}
-
-fun wasi02printlnErr(x: Any) {
-    stderr.blockingWriteAndFlush((x.toString() + "\n").encodeToByteArray().map { it.toUByte() })
+    fun printlnErr(x: Any) {
+        stderr.blockingWriteAndFlush((x.toString() + "\n").encodeToByteArray().map { it.toUByte() })
+    }
 }
