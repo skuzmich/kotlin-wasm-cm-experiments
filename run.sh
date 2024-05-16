@@ -13,8 +13,8 @@ mkdir -p ./build/out/dependencies
 cp wit/example.wit ./rust-component/wit/
 
 (cd ./rust-component/ && \
-cargo build --target wasm32-unknown-unknown --release && \
-wasm-tools component new ./target/wasm32-unknown-unknown/release/example.wasm -o ../build/out/dependencies/example.wasm)
+cargo build --target wasm32-wasi --release && \
+wasm-tools component new ./target/wasm32-wasi/release/example.wasm -o ../build/out/dependencies/example.wasm --adapt ../$WASI_ADAPTER)
 
 # Generate WIT bindings for Kotlin
 wit-bindgen kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings

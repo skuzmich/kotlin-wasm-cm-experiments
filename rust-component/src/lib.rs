@@ -1,6 +1,8 @@
 use pulldown_cmark::{html, Parser};
-use exports::component_model::example::ui::{Guest as UIGuest, Shape, Color, Modifiers};
-use exports::component_model::example::markdown::{Guest as MarkdownGuest};
+use exports::component_model::example::{
+    ui::{Guest as UIGuest, Shape, Color, Modifiers},
+    markdown::{Guest as MarkdownGuest}
+};
 
 wit_bindgen::generate!({
     path: "wit",
@@ -20,7 +22,7 @@ impl UIGuest for UI {
         color: Color,
         modifiers: Option<Modifiers>
     ) {
-        println!("Creating button:");
+        println!("\nCreating button:");
         println!("      label: {label}");
         println!("      shape: {:?}", shape);
         println!("      color: {:?}", color);
@@ -28,8 +30,8 @@ impl UIGuest for UI {
     }
 
     fn create_html_text_area(html: String) {
-        println!("Creating HTML text area:");
-        println!("      html: {html}");
+        println!("\nCreating HTML text area:");
+        println!("{html}");
     }
 }
 
