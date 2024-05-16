@@ -1,11 +1,9 @@
-interface test {
-    test: func();
+interface run {
+    run: func();
 }
 
 world w {
-  include wasi:cli/imports@0.2.0;
-  import jsiface;
-  import iface;
-  export iface;
-  export test;
+  import ui;
+  import markdown;
+  export run;
 }

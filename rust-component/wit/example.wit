@@ -1,0 +1,46 @@
+package component-model:example;
+
+// Interface for defining UI elements
+interface ui {
+  // Shape of a button.
+  enum shape {
+    rectangle,
+    rounded,
+    circle
+  }
+
+  // RGB color with red, green, and blue components.
+  record rgb { r: u8, g: u8, b: u8 }
+
+  // Color for UI elements.
+  variant color {
+    // RGB color with red, green, and blue components.
+    rgb(rgb),
+    // Color in hexadecimal format.
+    hex(string)
+  }
+
+  // Modifiers for UI elements.
+  flags modifiers {
+    outlined,
+    shadow,
+    gradient
+  }
+
+  // Create a button with specified attributes.
+  create-button: func(
+    label: string,
+    shape: shape,
+    color: color,
+    modifiers: option<modifiers>
+  );
+
+  // Create an HTML text area with specified content.
+  create-html-text-area: func(html: string);
+}
+
+// Markdown manipulation utilities
+interface markdown {
+    // Converts Markdown-formatted text to HTML.
+    convert-markdown-to-html: func(markdown: string) -> string;
+}

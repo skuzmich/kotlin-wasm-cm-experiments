@@ -1,5 +1,6 @@
-package cm:example;
+package component-model:example;
 
 world w {
-  export iface;
+  export ui;
+  export markdown;
 }
