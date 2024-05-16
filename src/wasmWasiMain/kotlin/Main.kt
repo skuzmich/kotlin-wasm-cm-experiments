@@ -23,8 +23,8 @@ object RunExportsImpl : RunExports {
             - [Learn more about Wasm Component Model](https://component-model.bytecodealliance.org/introduction.html)
         """.trimIndent()
 
-        createHtmlTextArea(
-            html = Markdown.convertMarkdownToHtml(markdown)
-        )
+        val html = Markdown.convertMarkdownToHtml(markdown)
+
+        createHtmlTextArea(html)
     }
 }
