@@ -2,7 +2,7 @@ interface run {
     run: func();
 }
 
-world w {
+world demo {
   import ui;
   import markdown;
   export run;
