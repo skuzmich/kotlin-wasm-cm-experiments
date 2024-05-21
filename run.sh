@@ -17,7 +17,8 @@ cargo build --target wasm32-wasi --release -q && \
 wasm-tools component new ./target/wasm32-wasi/release/example.wasm -o ../build/out/dependencies/example.wasm --adapt ../$WASI_ADAPTER)
 
 # Generate WIT bindings for Kotlin
-wit-bindgen kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
+cargo run --bin wit-bindgen --manifest-path /Users/skuzmich/work/wit-bindgen/Cargo.toml kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
+java -jar ./ktfmt-0.47-jar-with-dependencies.jar ./src/wasmWasiMain/kotlin/bindings
 
 # Compile Kotlin code
 ./gradlew :compileProductionExecutableKotlinWasmWasi -Pkotlin.wasm.stability.nowarn=true
