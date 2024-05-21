@@ -4,71 +4,6 @@
 
 import kotlin.wasm.unsafe.*
 
-class ComponentException(val value: Any?) : Throwable()
-
-sealed interface Option<out T> {
-  data class Some<T2>(val value: T2) : Option<T2>
-
-  data object None : Option<Nothing>
-}
-
-internal value class ResourceHandle(internal val value: Int)
-
-@WasmExport
-fun cabi_realloc(ptr: Int, oldSize: Int, align: Int, newSize: Int): Int =
-    componentModelRealloc(ptr, oldSize, newSize)
-
-fun MemoryAllocator.STRING_TO_MEM(s: String): Int =
-    writeToLinearMemory(s.encodeToByteArray()).address.toInt()
-
-fun STRING_FROM_MEM(addr: Int, len: Int): String = loadByteArray(addr.ptr, len).decodeToString()
-
-fun MALLOC(size: Int, align: Int): Int = TODO()
-
-val Int.ptr: Pointer
-  get() = Pointer(this.toUInt())
-
-fun Pointer.loadUByte(): UByte = loadByte().toUByte()
-
-fun Pointer.loadUShort(): UShort = loadShort().toUShort()
-
-fun Pointer.loadUInt(): UInt = loadInt().toUInt()
-
-fun Pointer.loadULong(): ULong = loadLong().toULong()
-
-internal fun MemoryAllocator.writeToLinearMemory(value: String): Pointer =
-    writeToLinearMemory(value.encodeToByteArray())
-
-internal fun loadString(addr: Pointer, size: Int): String =
-    loadByteArray(addr, size).decodeToString()
-
-internal fun loadByteArray(addr: Pointer, size: Int): ByteArray =
-    ByteArray(size) { i -> (addr + i).loadByte() }
-
-internal fun MemoryAllocator.writeToLinearMemory(array: ByteArray): Pointer {
-  val pointer = allocate(array.size)
-  var currentPointer = pointer
-  array.forEach {
-    currentPointer.storeByte(it)
-    currentPointer += 1
-  }
-  return pointer
-}
-
-fun Pointer.loadFloat(): Float = Float.fromBits(loadInt())
-
-fun Pointer.loadDouble(): Double = Double.fromBits(loadLong())
-
-fun Pointer.storeFloat(value: Float) {
-  storeInt(value.toRawBits())
-}
-
-fun Pointer.storeDouble(value: Double) {
-  storeLong(value.toRawBits())
-}
-
-// -------------------------------------------------------
-
 object Ui {
 
   /** Shape of a button. */
@@ -118,6 +53,7 @@ object Ui {
       color: Ui.Color,
       modifiers: Ui.Modifiers?
   ): Unit {
+    // <editor-fold defaultstate="collapsed" desc="Generated Bindings Code">
     withScopedMemoryAllocator { allocator ->
       val bytearray = label.encodeToByteArray()
       val len = bytearray.size
@@ -165,9 +101,11 @@ object Ui {
           ptr, len, shape.ordinal, variant, variant4, variant5, variant6, option, option9)
       freeAllComponentModelReallocAllocatedMemory()
     }
+    // </editor-fold>
   }
   /** Create an HTML text area with specified content. */
   public fun createHtmlTextArea(html: String): Unit {
+    // <editor-fold defaultstate="collapsed" desc="Generated Bindings Code">
     withScopedMemoryAllocator { allocator ->
       val bytearray = html.encodeToByteArray()
       val len = bytearray.size
@@ -176,28 +114,14 @@ object Ui {
       __wasm_import_createHtmlTextArea(ptr, len)
       freeAllComponentModelReallocAllocatedMemory()
     }
+    // </editor-fold>
   }
 }
-
-@WasmImport("component-model:example/ui", "create-button")
-private external fun __wasm_import_createButton(
-    p0: Int,
-    p1: Int,
-    p2: Int,
-    p3: Int,
-    p4: Int,
-    p5: Int,
-    p6: Int,
-    p7: Int,
-    p8: Int
-): Unit
-
-@WasmImport("component-model:example/ui", "create-html-text-area")
-private external fun __wasm_import_createHtmlTextArea(p0: Int, p1: Int): Unit
 
 object Markdown {
   /** Converts Markdown-formatted text to HTML. */
   public fun convertMarkdownToHtml(markdown: String): String {
+    // <editor-fold defaultstate="collapsed" desc="Generated Bindings Code">
     withScopedMemoryAllocator { allocator ->
       val bytearray = markdown.encodeToByteArray()
       val len = bytearray.size
@@ -208,18 +132,10 @@ object Markdown {
       freeAllComponentModelReallocAllocatedMemory()
       return STRING_FROM_MEM((ptr0 + 0).ptr.loadInt(), (ptr0 + 4).ptr.loadInt())
     }
+    // </editor-fold>
   }
 }
 
-@WasmImport("component-model:example/markdown", "convert-markdown-to-html")
-private external fun __wasm_import_convertMarkdownToHtml(p0: Int, p1: Int, p2: Int): Unit
-
 interface RunExports {
   fun run(): Unit
-}
-
-@WasmExport("component-model:example/run#run")
-fun __wasm_export_run(): Unit {
-  freeAllComponentModelReallocAllocatedMemory()
-  withScopedMemoryAllocator { allocator -> RunExportsImpl.run() }
 }
