@@ -19,6 +19,7 @@ wasm-tools component new ./target/wasm32-unknown-unknown/release/iface.wasm -o .
 
 # Generate WIT bindings for Kotlin
 wit-bindgen kotlin ./wit --out-dir src/wasmWasiMain/kotlin/bindings
+java -jar ./ktfmt-0.47-jar-with-dependencies.jar ./src/wasmWasiMain/kotlin/bindings
 
 # Compile Kotlin code
 ./gradlew :compileProductionExecutableKotlinWasmWasi
