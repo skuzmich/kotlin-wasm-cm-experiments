@@ -24,10 +24,10 @@ Install wasm-tools
 cargo install wasm-tools
 ```
 
-Install Node.js with canary V8 with WasmGC support, for example via NVM:
+Install Node.js v22+ with WasmGC support, for example via NVM:
 
 ```shell
-NVM_NODEJS_ORG_MIRROR=https://nodejs.org/download/v8-canary nvm install 21.0.0-v8-canary20231019bd785be450
+nvm install v22.2.0
 ```
 
 Install jco and preview2-shim
