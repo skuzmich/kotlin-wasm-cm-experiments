@@ -36,5 +36,15 @@ import('./build/out/jco/kco-wasm-wasi.mjs').then(x => {
 
     console.log("Testing...");
     x.test.test();
+    console.log("Testing exported resources");
+    let { TestExportedResource } = x.test;
+    {
+        let test = new TestExportedResource(11);
+        console.log(test.getA());
+        test.setA(22);
+        console.log(test.getA());
+        let test2 = TestExportedResource.add(test, 33);
+        console.log(test2.getA());
+    }
     console.log("Testing end...");
 });

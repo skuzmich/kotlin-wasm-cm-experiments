@@ -93,6 +93,18 @@ object TestExportsImpl : TestExports {
         println("\n-- iface exports testing done")
         println("--------------------------------\n\n")
     }
+
+    class TestExportedResourceImpl(var a: Int) : TestExports.TestExportedResource() {
+        override fun getA(): Int = a
+        override fun setA(a: Int) {
+            this.a = a
+        }
+
+        companion object : Statics {
+            override fun add(x: TestExportedResourceImpl, a: Int): TestExportedResourceImpl =
+                TestExportedResourceImpl(x.a + a)
+        }
+    }
 }
 
 fun testWASI() {

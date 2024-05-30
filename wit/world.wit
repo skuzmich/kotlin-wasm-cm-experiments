@@ -1,4 +1,10 @@
 interface test {
+    resource test-exported-resource {
+      constructor(a: s32);
+      get-a: func() -> s32;
+      set-a: func(a: s32);
+      add: static func(x: borrow<test-exported-resource>, a: s32) -> test-exported-resource;
+    }
     test: func();
 }
 
