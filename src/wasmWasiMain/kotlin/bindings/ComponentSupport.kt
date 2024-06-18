@@ -64,3 +64,40 @@ fun Pointer.storeFloat(value: Float) {
 fun Pointer.storeDouble(value: Double) {
   storeLong(value.toRawBits())
 }
+
+internal object RepTable {
+  private val list = mutableListOf<Any>()
+
+  private var firstVacant: Int? = null
+
+  private data class Vacant(var next: Int?)
+
+  fun add(v: Any): Int {
+    val rep: Int
+    if (firstVacant != null) {
+      rep = firstVacant!!
+      firstVacant = (list[rep] as Vacant).next
+      list[rep] = v
+    } else {
+      rep = list.size
+      list += v
+    }
+    return rep
+  }
+
+  fun get(rep: Int): Any {
+    check(list[rep] !is Vacant)
+    return list[rep]
+  }
+
+  fun remove(rep: Int): Any {
+    val v = get(rep)
+    list[rep] = Vacant(firstVacant)
+    firstVacant = rep
+    return v
+  }
+
+  override fun toString(): String {
+    return "RepTable(firstVacant=${firstVacant}, list = $list)"
+  }
+}
